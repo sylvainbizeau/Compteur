@@ -1,0 +1,22 @@
+{
+  "name": "cb-compteur",
+  "version": "1.0.0",
+  "description": "Un test de compteur pour CB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "server",
+    "http",
+    "CB"
+  ],
+  "author": "Sylvain Bizeau",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "scripts":{
+    "start": "node index.js"
+  }
+}
