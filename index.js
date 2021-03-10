@@ -9,4 +9,4 @@ function f(req, response)
   response.end();
 }
 var server = http.createServer(f);
-server.listen(1000);
+server.listen(80);
