@@ -1,8 +1,10 @@
 // importation
-var express = require('express')
+var express = require('express');
+var bodyParser = require('body-parser');
 
 //instance serveur
 var server = express();
+server.use(bodyParser.urlencoded({ extended: true }));
 
 // Variable
 var counter = 0;
@@ -12,13 +14,40 @@ const PORT = process.env.PORT || 5000
 
 //config racine
 server.get('/', function(req, res) {
-    //if(req.url == '/favicon.ico') return;
-    //res.writeHead(200, {'Content-Type': 'text/plain;charset=utf-8'});
+    if(req.url == '/favicon.ico') return;
     counter++;
-    //res.write(counter);
-    //res.end();
     res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(counter.toString())
+    var monNb = counter.toString();
+    var i ;
+    for (i = monNb.length; i <= 8; i++) {
+        monNb = "0" + monNb;
+    }
+    res.status(200).send(monNb);
+});
+server.get('/modif', function(req, res) {
+    var corp = '<html>' +
+                '<script>' +
+                'function sendForm() {' + 
+                '    var nbCB = document.form1.nbCB.value;' +
+                '    var action = document.form1.action;' +
+                '    document.form1.action = action + "?nbCB=" + nbCB;' +
+                '}' +
+                '</script>' + 
+                '<body>' +
+                '<form method="post" name="form1" action="/maj">' +
+                    '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
+                    '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
+                '</form>';
+                '</body>' + 
+                '</html>';
+
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).send(corp);
+});
+
+server.post('/maj', function(req, res) {
+    console.log(req.body.nbCB.toString());
+    counter = req.body.nbCB;
 });
 
 //lancer serveur
