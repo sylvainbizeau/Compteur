@@ -28,11 +28,11 @@ server.get('/', function(req, res) {
                         'iframe2 = document.getElementById("innerContent");'+
                         'frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;'+
                         'el = frameDoc2.getElementById("toDesign");'+
-                        'el.value = "' + monNb +'";'
+                        'el.value = "' + monNb +'";' +
                     '}'+
                  '</script>' +
                  '<body>' +
-                 '<a id="nbCB" href="javascript:setNb()>' + monNb + '</a>'+
+                 '<a href="javascript:setNb()">' + monNb + '</a>'+
                  '</body>' + 
                  '</html>';
     res.status(200).send(monHtml);
