@@ -22,8 +22,16 @@ server.get('/', function(req, res) {
     for (i = monNb.length; i <= 8; i++) {
         monNb = "0" + monNb;
     }
-    monNb = "<h1 d='nbCB'>" + monNb + "</h1>"
-    res.status(200).send(monNb);
+    var monHtml = '<script language="JavaScript" type="text/javascript">'  +
+                    'function setNb(){'+
+                        'iframe2 = document.getElementById("innerContent");'+
+                        'frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;'+
+                        'el = frameDoc2.getElementById("toDesign");'+
+                        'el.value = "' + monNb +'";'
+                    '}'+
+                 '</script>' +
+                 '<a id="nbCB" href="javascript:setNb()>' + monNb + '</a>'
+    res.status(200).send(monHtml);
 });
 server.get('/modif', function(req, res) {
     var corp = '<html>' +
