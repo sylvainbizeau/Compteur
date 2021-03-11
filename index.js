@@ -5,8 +5,11 @@ var express = require('express')
 //instance serveur
 var server = express();
 
-// Varriable
+// Variable
 var counter = 0;
+
+// Constante
+const PORT = process.env.PORT || 5000
 
 //config racine
 server.get('/', function(req, res) {
@@ -20,6 +23,6 @@ server.get('/', function(req, res) {
 });
 
 //lancer serveur
-server.listen(443, function(){
-    console.log('serveur en écoute');
+server.listen(PORT, function(){
+    console.log('serveur en écoute sur { PORT }');
 });
