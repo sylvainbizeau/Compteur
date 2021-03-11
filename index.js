@@ -22,6 +22,7 @@ server.get('/', function(req, res) {
     for (i = monNb.length; i <= 8; i++) {
         monNb = "0" + monNb;
     }
+    monNb = "<h1 d='nbCB'>" + monNb + "</h1>"
     res.status(200).send(monNb);
 });
 server.get('/modif', function(req, res) {
