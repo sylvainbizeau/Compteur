@@ -22,7 +22,8 @@ server.get('/', function(req, res) {
     for (i = monNb.length; i <= 8; i++) {
         monNb = "0" + monNb;
     }
-    var monHtml = '<script language="JavaScript" type="text/javascript">'  +
+    var monHtml = '<html>' +
+                    '<script language="JavaScript" type="text/javascript">'  +
                     'function setNb(){'+
                         'iframe2 = document.getElementById("innerContent");'+
                         'frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;'+
@@ -30,7 +31,10 @@ server.get('/', function(req, res) {
                         'el.value = "' + monNb +'";'
                     '}'+
                  '</script>' +
-                 '<a id="nbCB" href="javascript:setNb()>' + monNb + '</a>'
+                 '<body>' +
+                 '<a id="nbCB" href="javascript:setNb()>' + monNb + '</a>'+
+                 '</body>' + 
+                 '</html>';
     res.status(200).send(monHtml);
 });
 server.get('/modif', function(req, res) {
