@@ -32,7 +32,7 @@ server.get('/', function(req, res) {
                     '}'+
                  '</script>' +
                  '<body>' +
-                 '<a href="javascript:setNb()">' + monNb + '</a>'+
+                 '<a href="javascript:setNb()" id="nbCB">' + monNb + '</a>'+
                  '</body>' + 
                  '</html>';
     res.status(200).send(monHtml);
