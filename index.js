@@ -22,21 +22,20 @@ server.get('/', function(req, res) {
     for (i = monNb.length; i <= 8; i++) {
         monNb = "0" + monNb;
     }
-    var monHtml = '<html>' +
-                    '<head>'  +
-                    '<title>' + monNb + '</title>'  +
-                    '<script language="JavaScript" type="text/javascript">'  +
-                    'function setNb(){'+
-                        'iframe2 = document.getElementById("innerContent");'+
-                        'frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;'+
-                        'el = frameDoc2.getElementById("toDesign");'+
-                        'el.value = "' + monNb +'";' +
-                    '}'+
-                    '</script>' +
-                    '</head>'  +
-                    '<body>' +
-                    '<a href="javascript:setNb()" id="nbCB">' + monNb + '</a>'+
-                    '</body>' + 
+    var monHtml = '<html>\n' +
+                    '<head>\n'  +
+                    '<script language="JavaScript" type="text/javascript">\n'  +
+                    'function setNb(){\n'+
+                        'iframe2 = document.getElementById("innerContent");\n'+
+                        'frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;\n'+
+                        'el = frameDoc2.getElementById("toDesign");\n'+
+                        'el.value = "' + monNb +'";\n' +
+                    '}\n'+
+                    '</script>\n' +
+                    '</head>\n'  +
+                    '<body>\n' +
+                    '<a href="javascript:setNb()" id="nbCB">' + monNb + '</a>\n'+
+                    '</body>\n' + 
                     '</html>';
     res.status(200).send(monHtml);
 });
