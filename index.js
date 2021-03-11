@@ -1,4 +1,3 @@
-
 // importation
 var express = require('express')
 
@@ -24,5 +23,5 @@ server.get('/', function(req, res) {
 
 //lancer serveur
 server.listen(PORT, function(){
-    console.log('serveur en écoute sur { PORT }');
+    console.log('serveur en écoute sur ' + PORT.toString());
 });
