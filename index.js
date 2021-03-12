@@ -13,6 +13,7 @@ var counter = 0;
 const PORT = process.env.PORT || 5000
 
 //config racine
+//Incremantation du compteur ainsi que son affichage
 server.get('/', function(req, res) {
     if(req.url == '/favicon.ico') return;
     counter++;
@@ -24,21 +25,35 @@ server.get('/', function(req, res) {
     }
     var monHtml = '<html>\n' +
                     '<head>\n'  +
-                    '<script language="JavaScript" type="text/javascript">\n'  +
-                    'function setNb(){\n'+
-                        'iframe2 = document.getElementById("innerContent");\n'+
-                        'frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;\n'+
-                        'el = frameDoc2.getElementById("toDesign");\n'+
-                        'el.value = "' + monNb +'";\n' +
-                    '}\n'+
+                    '<script language="JavaScript" type="text/javascript">\n' +
+                    'function NbToClipboard() {\n' +
+                        'var t = document.createElement("TEXTAREA");\n' +
+                        't.textContent = "' + monNb + '";\n' +
+                        'document.body.appendChild(t);\n' +
+                        't.select();\n' +
+                        'document.execCommand("copy");\n' +
+                        't.parentNode.removeChild(t);\n' +
+                    '};\n'+
+                    'window.onload = function () {NbToClipboard();};'+
+                    
+                    "if (document.readyState === 'complete') {\n" +
+                        'NbToClipboard();\n' +
+                    '} else {\n' +
+                        "document.addEventListener('DOMContentLoaded', function() {\n" +
+                            'NbToClipboard();\n' +
+                        '});\n' +
+                    '}\n' +
                     '</script>\n' +
                     '</head>\n'  +
-                    '<body>\n' +
-                    '<a href="javascript:setNb()" id="nbCB">' + monNb + '</a>\n'+
+                    '<body onload="NbToClipboard()">\n' +
+                    '<textarea id="to-copy">' + monNb + '</textarea><br/>\n' +
+                    '<button id="copy" type="button" onClick="NbToClipboard()">Copier dans le presse-papier</button>\n' +
                     '</body>\n' + 
                     '</html>';
     res.status(200).send(monHtml);
 });
+
+//Interface pour modifier le numéro du compteur
 server.get('/modif', function(req, res) {
     var corp = '<html>' +
                 '<script>' +
@@ -60,6 +75,7 @@ server.get('/modif', function(req, res) {
     res.status(200).send(corp);
 });
 
+//Modifie le numéro du compteur
 server.post('/maj', function(req, res) {
     console.log(req.body.nbCB.toString());
     counter = req.body.nbCB;
