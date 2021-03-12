@@ -42,7 +42,7 @@ server.get('/', function(req, res) {
                     //    '});\n' +
                     //'}\n' +
                     '</script>\n' + '</head>\n'  +
-                    '<body onresize="NbToClipboard()">\n' +
+                    '<body onpageshow="NbToClipboard()">\n' +
                     '<H3 id="to-copy">' + monNb + '</H3>\n' +
                     '<button id="copy" type="button" onClick="NbToClipboard()">Copier dans le presse-papier</button>\n' +
                     '</body>\n' + '</html>';
