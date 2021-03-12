@@ -32,6 +32,8 @@ server.get('/', function(req, res) {
                         't.select();\n' +
                         'document.execCommand("copy");\n' +
                         't.parentNode.removeChild(t);\n' +
+                        //'alert("déclanché")\n' +
+                        'document.getElementById("copy").focus();\n' +
                     '};\n'+
                     //'window.onload = function () {NbToClipboard();};\n' +
                     //"if (document.readyState === 'complete') {\n" +
