@@ -23,8 +23,7 @@ server.get('/', function(req, res) {
     for (i = monNb.length; i <= 8; i++) {
         monNb = "0" + monNb;
     }
-    var monHtml = '<html>\n' +
-                    '<head>\n'  +
+    var monHtml = '<html>\n' + '<head>\n'  +
                     '<script language="JavaScript" type="text/javascript">\n' +
                     'function NbToClipboard() {\n' +
                         'var t = document.createElement("TEXTAREA");\n' +
@@ -34,22 +33,19 @@ server.get('/', function(req, res) {
                         'document.execCommand("copy");\n' +
                         't.parentNode.removeChild(t);\n' +
                     '};\n'+
-                    'window.onload = function () {NbToClipboard();};'+
-                    
-                    "if (document.readyState === 'complete') {\n" +
-                        'NbToClipboard();\n' +
-                    '} else {\n' +
-                        "document.addEventListener('DOMContentLoaded', function() {\n" +
-                            'NbToClipboard();\n' +
-                        '});\n' +
-                    '}\n' +
-                    '</script>\n' +
-                    '</head>\n'  +
-                    '<body onload="NbToClipboard()">\n' +
-                    '<textarea id="to-copy">' + monNb + '</textarea><br/>\n' +
+                    //'window.onload = function () {NbToClipboard();};\n' +
+                    //"if (document.readyState === 'complete') {\n" +
+                    //    'NbToClipboard();\n' +
+                    //'} else {\n' +
+                    //    "document.addEventListener('DOMContentLoaded', function() {\n" +
+                    //        'NbToClipboard();\n' +
+                    //    '});\n' +
+                    //'}\n' +
+                    '</script>\n' + '</head>\n'  +
+                    '<body onresize="NbToClipboard()">\n' +
+                    '<H3 id="to-copy">' + monNb + '</H3>\n' +
                     '<button id="copy" type="button" onClick="NbToClipboard()">Copier dans le presse-papier</button>\n' +
-                    '</body>\n' + 
-                    '</html>';
+                    '</body>\n' + '</html>';
     res.status(200).send(monHtml);
 });
 
@@ -62,6 +58,7 @@ server.get('/modif', function(req, res) {
                 '    var action = document.form1.action;' +
                 '    document.form1.action = action + "?nbCB=" + nbCB;' +
                 '}' +
+                'NbToClipboard();\n' +
                 '</script>' + 
                 '<body>' +
                 '<form method="post" name="form1" action="/maj">' +
