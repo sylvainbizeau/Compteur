@@ -13,18 +13,20 @@ app.use(cors())
 
 app.use(express.static(__dirname + '/static'))
 
-var mynb = 0;
-
 app.get('/nb', (req, res) => {
+	var i;
     var content = fs.readFileSync(DB_PATH, 'utf8');
     content = parseInt(content) + 1; 
     content = content.toString();
+
+	for (i=content.length;i<=8;i++) {
+		content = "0" + content;
+	}
     fs.writeFileSync(DB_PATH, content);
     console.log(content);
     
     fs.readFile(DB_PATH, 'utf-8', (err, val) => {
         if (err) return res.status(500).send(err);
-        //mynb = parseInt(val) + 1;
         res.json({
             nb: val
         })
