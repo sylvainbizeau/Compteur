@@ -1,0 +1,14 @@
+<h1>Valeur actuelle: <span id="actualNb"></span></h1>
+
+<script>
+    fetch('/nb', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+        .then((ret) => {
+            document.getElementById('actualNb').textContent = ret.nb
+        })
+</script>

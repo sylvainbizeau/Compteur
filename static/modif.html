@@ -1,0 +1,20 @@
+<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />
+<input value="Modifier" id="bt" type="submit">
+
+<script>
+    document.getElementById('bt').addEventListener('click', () => {
+        fetch('/maj', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nbCB: document.getElementById('nbCB').value
+            })
+        }).then(res => res.json())
+        .then(() => {
+            console.log('ok !')
+        })
+    })
+</script>
