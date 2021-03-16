@@ -1,58 +1,51 @@
-// importation
-var express = require('express');
-var bodyParser = require('body-parser');
 
-//instance serveur
-var server = express();
-server.use(bodyParser.urlencoded({ extended: true }));
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const fs = require('fs')
 
-// Variable
-var counter = 0;
-
-// Constante
 const PORT = process.env.PORT || 5000
+const DB_PATH = __dirname + '/db/compteur.txt'
 
-//config racine
-//Incremantation du compteur ainsi que son affichage
-server.get('/', function(req, res) {
-    if(req.url == '/favicon.ico') return;
-    counter++;
-    res.setHeader('Content-Type', 'text/html');
-    var monNb = counter.toString();
-    var i ;
-    for (i = monNb.length; i <= 8; i++) {
-        monNb = "0" + monNb;
+const app = express()
+app.use(bodyParser.json())
+app.use(cors())
+
+app.use(express.static(__dirname + '/static'))
+
+var mynb = 0;
+
+app.get('/nb', (req, res) => {
+    var content = fs.readFileSync(DB_PATH, 'utf8');
+    content = parseInt(content) + 1; 
+    content = content.toString();
+    fs.writeFileSync(DB_PATH, content);
+    console.log(content);
+    
+    fs.readFile(DB_PATH, 'utf-8', (err, val) => {
+        if (err) return res.status(500).send(err);
+        //mynb = parseInt(val) + 1;
+        res.json({
+            nb: val
+        })
+    })
+})
+
+app.post('/maj', function(req, res) {
+    console.log(req.query.nbCB)
+    const nb = parseInt(req.query.nbCB)
+    if (+nb) { // si nombre
+        fs.writeFile(DB_PATH, nb.toString(), 'utf-8', (err) => {
+            if (err) return res.status(500).send(err)                
+            console.log('saved')
+        })
+        return
     }
-    var monHtml = '<html>\n' + '<head>\n'  +
-                    '<script language="JavaScript" type="text/javascript">\n' +
-                    'function NbToClipboard() {\n' +
-                        'var t = document.createElement("TEXTAREA");\n' +
-                        't.textContent = "' + monNb + '";\n' +
-                        'document.body.appendChild(t);\n' +
-                        't.select();\n' +
-                        'document.execCommand("copy");\n' +
-                        't.parentNode.removeChild(t);\n' +
-                        //'alert("déclanché")\n' +
-                        'document.getElementById("copy").focus();\n' +
-                    '};\n'+
-                    //'window.onload = function () {NbToClipboard();};\n' +
-                    //"if (document.readyState === 'complete') {\n" +
-                    //    'NbToClipboard();\n' +
-                    //'} else {\n' +
-                    //    "document.addEventListener('DOMContentLoaded', function() {\n" +
-                    //        'NbToClipboard();\n' +
-                    //    '});\n' +
-                    //'}\n' +
-                    '</script>\n' + '</head>\n'  +
-                    '<body onpageshow="NbToClipboard()">\n' +
-                    '<H3 id="to-copy">' + monNb + '</H3>\n' +
-                    '<button id="copy" type="button" onClick="NbToClipboard()">Copier dans le presse-papier</button>\n' +
-                    '</body>\n' + '</html>';
-    res.status(200).send(monHtml);
-});
+    res.status(400).send() // si pas nombre
+})
 
 //Interface pour modifier le numéro du compteur
-server.get('/modif', function(req, res) {
+app.get('/modif', function(req, res) {
     var corp = '<html>' +
                 '<script>' +
                 'function sendForm() {' + 
@@ -72,15 +65,8 @@ server.get('/modif', function(req, res) {
 
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(corp);
-});
+})
 
-//Modifie le numéro du compteur
-server.post('/maj', function(req, res) {
-    console.log(req.body.nbCB.toString());
-    counter = req.body.nbCB;
-});
-
-//lancer serveur
-server.listen(PORT, function(){
+app.listen(PORT, function(){
     console.log('serveur en écoute sur ' + PORT.toString());
-});
+})
