@@ -2,45 +2,52 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const fs = require('fs')
+const app = express();
+const fs = require('fs');// a supprimer
+const {MongoClient} = require("mongodb");
 
 const PORT = process.env.PORT || 5000
 const DB_PATH = __dirname + '/db/compteur.txt'
 
-const app = express()
-app.use(bodyParser.json())
-app.use(cors())
+const dbName = "CompteurDb";
+const dbColl = "CompteurC";
+const dbPassword = "dbPwd";
+const uri =  "mongodb+srv://dbUser:"+dbPassword+"@cluster0.khy3m.mongodb.net/"+dbName+"?retryWrites=true&w=majority";
+const options = {useNewUrlParser: true, useUnifiedTopology: true};
 
+app.use(bodyParser.json());
+app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+    
 app.use(express.static(__dirname + '/static'))
 
 app.get('/nb', (req, res) => {
-	var i;
-    var content = fs.readFileSync(DB_PATH, 'utf8');
-    content = parseInt(content) + 1; 
-    content = content.toString();
+    Lire().then(V => {
+        console.log("Lue: "+V);
+        V = (parseInt(V) + 1).toString(); 
+            
+        for (i=V.length;i<8;i++) {
+            V = "0" + V;
+        }
+        res.send(V);
+        Ecrire(V);
+    });
+  });
 
-	for (i=content.length;i<=8;i++) {
-		content = "0" + content;
-	}
-    fs.writeFileSync(DB_PATH, content);
-    console.log(content);
-    
-    fs.readFile(DB_PATH, 'utf-8', (err, val) => {
-        if (err) return res.status(500).send(err);
-        res.json({
-            nb: val
-        })
-    })
-})
 
 app.post('/maj', function(req, res) {
-    console.log(req.query.nbCB)
-    const nb = parseInt(req.query.nbCB)
+    const nb = req.query.nbCB;
+    //console.log(req);
     if (+nb) { // si nombre
-        fs.writeFile(DB_PATH, nb.toString(), 'utf-8', (err) => {
-            if (err) return res.status(500).send(err)                
-            console.log('saved')
-        })
+        Ecrire(nb);
+        var corp = '<html><body>' +
+                    '<H1> Numéro de devis mis à jour :<br/>'+nb+'</H1>';
+                    '</body></html>';
+        res.status(200).send(corp);
         return
     }
     res.status(400).send() // si pas nombre
@@ -48,22 +55,12 @@ app.post('/maj', function(req, res) {
 
 //Interface pour modifier le numéro du compteur
 app.get('/modif', function(req, res) {
-    var corp = '<html>' +
-                '<script>' +
-                'function sendForm() {' + 
-                '    var nbCB = document.form1.nbCB.value;' +
-                '    var action = document.form1.action;' +
-                '    document.form1.action = action + "?nbCB=" + nbCB;' +
-                '}' +
-                'NbToClipboard();\n' +
-                '</script>' + 
-                '<body>' +
-                '<form method="post" name="form1" action="/maj">' +
+    var corp = '<html><script>function sendForm() {\n' + 
+                '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
+                '}\n</script><body><form method="post" name="form1" action="/maj">' +
                     '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
                     '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
-                '</form>';
-                '</body>' + 
-                '</html>';
+                '</form></body></html>';
 
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(corp);
@@ -72,3 +69,43 @@ app.get('/modif', function(req, res) {
 app.listen(PORT, function(){
     console.log('serveur en écoute sur ' + PORT.toString());
 })
+
+async function Lire(){
+    var Val1;
+    const clientL = new MongoClient(uri, options);
+    try {
+        //console.log("Connection à la base /L");
+        await clientL.connect();
+        console.log("Connecté à la base /Lecture");
+
+        var coll = clientL.db(dbName).collection(dbColl);
+        cursor = coll.find({}).limit(1)
+        await cursor.forEach(function(element) {
+            Val1 = element.nb;
+        });
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await clientL.close();
+        return Val1;
+    }
+}
+
+async function Ecrire(Val){
+    Val = Val.toString();
+    const clientE = new MongoClient(uri, options);
+    try {
+        //console.log("Connection à la base /E");
+        await clientE.connect();
+        console.log("Connecté à la base /Ecriture");
+
+        var coll = clientE.db(dbName).collection(dbColl);
+        await coll.deleteOne({});
+        await coll.insertOne({"nb":Val});
+        console.log("Ecrit: "+Val);
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await clientE.close();
+    }
+}

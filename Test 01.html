@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+<!--<meta name='referrer' content='origin'>-->
+    <script language='JavaScript' type='text/javascript'>
+    function setNb(){
+        l = document.createElement('link');
+        l.setAttribute('rel', 'stylesheet');
+        l.setAttribute('type', 'text/css');
+        l.setAttribute('href', 'http://localhost:5000/mycss.css');
+        document.head.appendChild(l);
+        window.addEventListener('message', function(v) {
+            try {
+            i = document.getElementById('innerContent');
+            f = i.contentDocument || i.contentWindow.document;
+            e = f.getElementById('toDesign');
+            } catch (err) {
+            e = document.getElementById('toDesign');
+            }
+            e.value = v.data;
+            document.getElementById('myFrame').remove();
+        });
+        i = document.createElement('iframe');
+        i.setAttribute('width', '210');
+        i.setAttribute('height', '70');
+        i.setAttribute('id', 'myFrame');
+
+        i.setAttribute('src', 'http://localhost:5000/');
+        document.body.appendChild(i);
+    }
+
+    function setNbOld(){
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('width', '210');
+        iframe.setAttribute('height', '70');
+        iframe.setAttribute('style', 'position:fixed;left:2px;top:2px; border:1px solid #000;background:#fff;z-index:10000;');
+        //iframe.setAttribute('src', 'https://cb-compteur.herokuapp.com/');
+        iframe.setAttribute('src', 'http://localhost:5000/');
+        iframe.onload = NbToClipboard();
+        document.body.appendChild(iframe);
+
+        iframe2 = document.getElementById('innerContent');
+        frameDoc2 = iframe2.contentDocument || iframe2.contentWindow.document;
+        el = frameDoc2.getElementById('toDesign');
+        frameDoc = iframe.contentDocument || iframe.contentWindow.document;
+        el.value = frameDoc.body.getElementById('nbCB').innerText;
+    }
+    </script>
+</head>
+<body>
+    <input maxlength='40' style='font-family: verdana; font-size: 10px; width: 140px; background-color: #F5F5F5' id='toDesign' name='toDesign' value='CPTN_K1'><br/>
+    <br/>
+    <a class='btn' href='javascript:((function(){iframe=document.getElementById(%22innerContent%22),frameDoc=iframe.contentDocument||iframe.contentWindow.document,el=frameDoc.getElementById(%22toDesign%22);el.value=%22Tadaaa%22})).call(this);'>Tadaa !</a>
+    <br/>
+    <br/>
+    <a class='btn' href='javascript:setNb()'>Tadaa 2 test !</a>
+    <br/>
+    <a class="btn" href="javascript:((function(){window.addEventListener('message',function(t){try{i=document.getElementById('innerContent'),f=i.contentDocument||i.contentWindow.document,e=f.getElementById('toDesign')}catch(t){e=document.getElementById('toDesign')}e.value=t.data,document.getElementById('myFrame').remove()}),l=document.createElement('link'),l.setAttribute('rel','stylesheet'),l.setAttribute('type','text/css'),l.setAttribute('href','http://localhost:5000/mycss.css'),document.body.appendChild(l),i=document.createElement('iframe'),i.setAttribute('width','210'),i.setAttribute('height','70'),i.setAttribute('id','myFrame'),i.setAttribute('src','http://localhost:5000/'),document.body.appendChild(i)})).call(this);">Tadaa 2 !</a><br/>
+    <a class='btn' href='javascript:((function(){var a;a=function(){var a,b,c,e;b=document,e=b.createElement("script"),a=b.head;try{if(!a)throw 0;c="localhost:5000";if(typeof runInject!="function")return e.setAttribute("src",""+"http:"+"//"+c+"/inject.js"),e.setAttribute("type","text/javascript"),e.setAttribute("onload","runInject()"),a.appendChild(e)}catch(f){return console.log(f),alert("Please wait until the page has loaded.")}},a(),void 0})).call(this);'>Tadaa 3 !</a><br/>
+    
+</body>
+</html>
