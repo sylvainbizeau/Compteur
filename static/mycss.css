@@ -1,0 +1,14 @@
+#myFrame {
+    color: #333;
+    font-family:arial, helvetica, clean, sans-serif;
+    //line-height:20px;
+    //width:172px;
+    background-color:#eee;
+    position:fixed;
+    right:0;
+    top:0;
+    z-index:2147483637;
+    padding:10px;
+    border-width: 0 0 1px 1px;
+    border-radius: 0 0 0 5px;
+}

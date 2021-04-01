@@ -1,14 +1,14 @@
-<h1>Valeur actuelle: <span id="actualNb"></span></h1>
+<body>
+    <h1>Valeur actuelle: <span id="actualNb"></span></h1>
 
-<script>
-    fetch('/nb', {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    }).then(res => res.json())
-        .then((ret) => {
-            document.getElementById('actualNb').textContent = ret.nb
-        })
-</script>
+    <script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>    
+    <script>
+        fetch('/nb')
+        .then(function(res){
+            return res.text();
+        }).then(function(res){
+            return document.getElementById('actualNb').textContent = res
+        });
+    </script>
+</body>
