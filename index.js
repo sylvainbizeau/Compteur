@@ -60,18 +60,19 @@ function ValZero (Val) {
 app.get('/list', function(req, res) {
     const nb = req.query.nb;
     if (+nb) { // si nombre
-        var Val = Lire();
-        var ValS = ValZero(++Val);
-        var i;
-        for (i=1;i<nb;i++) {
-            ValS = ValS+'<br/>'+ValZero(++Val);
+        Lire().then(Val => {
+            var ValS = ValZero(++Val);
+            var i;
+            for (i=1;i<nb;i++) {
+                ValS = ValS+'<br/>'+ValZero(++Val);
+            }
+            Ecrire(Val);
+            var corp = '<html><body>' +
+                        '<H1> Voici la liste des '+nb+' numéros demandés :<br/>'+ValS+'</H1>' +
+                        '</body></html>';
+            res.status(200).send(corp);
+            return;
         }
-        Ecrire(Val);
-        var corp = '<html><body>' +
-                    '<H1> Voici la liste des '+nb+' numeros demandes :<br/>'+ValS+'</H1>' +
-                    '</body></html>';
-        res.status(200).send(corp);
-        return
     }
     res.status(400).send() // si pas nombre
 })
