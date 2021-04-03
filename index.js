@@ -67,7 +67,7 @@ app.post('/list', function(req, res) {
         }
         Ecrire(Val);
         var corp = '<html><body>' +
-                    '<H1> Voici la liste des '+nb+' numéros demandés :<br/>'+ValS+'</H1>';
+                    '<H1> Voici la liste des ' + nb + ' numeros demandes :<br/>'+ValS+'</H1>' +
                     '</body></html>';
         res.status(200).send(corp);
         return
