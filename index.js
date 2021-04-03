@@ -72,7 +72,7 @@ app.get('/list', function(req, res) {
                         '</body></html>';
             res.status(200).send(corp);
             return;
-        }
+        });
     }
     res.status(400).send() // si pas nombre
 })
