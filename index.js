@@ -62,6 +62,7 @@ app.post('/list', function(req, res) {
     if (+nb) { // si nombre
         var Val = Lire();
         Var ValS = ValZero(++Val);
+        var i;
         for (i=1;i<nb;i++) {
             ValS = ValS+"<br/>"+ValZero(++Val);
         }
