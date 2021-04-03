@@ -11,8 +11,9 @@ const DB_PATH = __dirname + '/db/compteur.txt'
 
 const dbName = "CompteurDb";
 const dbColl = "CompteurC";
-const dbPassword = "dbPwd";
-const uri =  "mongodb+srv://dbUser:"+dbPassword+"@cluster0.khy3m.mongodb.net/"+dbName+"?retryWrites=true&w=majority";
+const dbUser = process.env.DBUSER;
+const dbPassword = process.env.DBPASSWORD;
+const uri =  "mongodb+srv://"+dbUser+":"+dbPassword+"@cluster0.khy3m.mongodb.net/"+dbName+"?retryWrites=true&w=majority";
 const options = {useNewUrlParser: true, useUnifiedTopology: true};
 
 app.use(bodyParser.json());
