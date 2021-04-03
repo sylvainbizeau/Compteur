@@ -3,7 +3,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
-const fs = require('fs');// a supprimer
 const {MongoClient} = require("mongodb");
 
 const PORT = process.env.PORT || 5000
@@ -39,14 +38,36 @@ app.get('/nb', (req, res) => {
     });
   });
 
-
 app.post('/maj', function(req, res) {
     const nb = req.query.nbCB;
-    //console.log(req);
     if (+nb) { // si nombre
         Ecrire(nb);
         var corp = '<html><body>' +
                     '<H1> Numéro de devis mis à jour :<br/>'+nb+'</H1>';
+                    '</body></html>';
+        res.status(200).send(corp);
+        return
+    }
+    res.status(400).send() // si pas nombre
+})
+
+function ValZero (Val) {
+    const zero = "0000000";
+    var ValS = Val.toString();
+    return zero.substring(1, 9 -ValS.length) + ValS;
+}
+
+app.post('/list', function(req, res) {
+    const nb = req.query.nb;
+    if (+nb) { // si nombre
+        var Val = Lire();
+        Var ValS = ValZero(++Val);
+        for (i=1;i<nb;i++) {
+            ValS = ValS+"<br/>"+ValZero(++Val);
+        }
+        Ecrire(Val);
+        var corp = '<html><body>' +
+                    '<H1> Voici la liste des '+nb+' numéros demandés :<br/>'+ValS+'</H1>';
                     '</body></html>';
         res.status(200).send(corp);
         return
