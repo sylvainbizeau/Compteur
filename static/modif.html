@@ -1,16 +1,16 @@
-<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />
+<input placeholder="" name="nb" id="nb" maxlength="3" type="text" />
 <input value="Modifier" id="bt" type="submit">
 
 <script>
     document.getElementById('bt').addEventListener('click', () => {
-        fetch('/maj', {
+        fetch('/list', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                nbCB: document.getElementById('nbCB').value
+                nb: document.getElementById('nb').value
             })
         }).then(res => res.json())
         .then(() => {

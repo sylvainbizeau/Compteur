@@ -1,14 +1,17 @@
 <html>
-	<script>
-		function sendForm() {
-			var nb = document.form1.nb.value;
-			var action = document.form1.action;
-			document.form1.action = action + "?nb=" + nb;
-		}
-	</script>
+	<head>
+		<link rel="stylesheet" media="all" href="copy.css">
+		<script>
+			function sendForm() {
+				var nb = document.form1.nb.value;
+				var action = document.form1.action;
+				document.form1.action = action + "?nb=" + nb;
+			}
+		</script>
+	</head>
 	<body>
 		<form method="post" name="form1" action="/list">
-			Combien de numéro de devis avez-vous besoin ? <br/>
+			Combien de numÃ©ro de devis avez-vous besoin ? <br/>
 			<input placeholder="" name="nb" id="nb" maxlength="3" type="text" />
 			<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />
 		</form>
