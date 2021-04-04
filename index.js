@@ -1,10 +1,13 @@
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
 const {MongoClient} = require("mongodb");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000
+const DB_PATH = __dirname + '/db/compteur.txt'
+
 const dbName = "CompteurDb";
 const dbColl = "CompteurC";
 const dbUser = process.env.DBUSER;
@@ -41,8 +44,8 @@ app.post('/maj', function(req, res) {
     const nb = req.query.nbCB;
     if (+nb) { // si nombre
         Ecrire(nb);
-        var corp = '<html><body>' +
-                    '<H1> Numéro de devis mis à jour :<br/>'+nb+'</H1>';
+        var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+					'</head><body><H3> Numéro de devis mis à jour :<br/>'+nb+'</H3>';
                     '</body></html>';
         res.status(200).send(corp);
         return
@@ -58,12 +61,22 @@ app.post('/list', function(req, res) {
             var ValS = ValZero(++Val);
             var i;
             for (i=1;i<nb;i++) {
-                ValS = ValS+'<br/>'+ValZero(++Val);
+                ValS = ValS+'\n'+ValZero(++Val);
             }
             Ecrire(Val);
-            var corp = '<html><body>' +
-                        '<H1> Voici la liste des '+nb+' numéros demandés :<br/>'+ValS+'</H1>' +
-                        '</body></html>';
+            var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+						'</head><body><H3> Voici la liste de numéro demandée :</H3><textarea id="to-copy" style="height: 400px;">'+ValS+'</textarea>' +
+						'<button id="copy" type="button">Copier dans le presse-papier<span class="copiedtext" aria-hidden="true">Copié</span></button>' +
+						'<script>\nvar toCopy = document.getElementById("to-copy");\nvar btnCopy = document.getElementById("copy");\n' +
+						'btnCopy.addEventListener("click", function(){\n' +
+						'toCopy.select();\n' +
+						'if (document.execCommand("copy")) {\n' +
+						'btnCopy.classList.add("copied");\n document.body.style.cursor = "wait";\n' +
+						'var temp = setInterval(function(){\n btnCopy.classList.remove("copied");\n document.body.style.cursor = "default";\n clearInterval(temp);\n }, 600);\n' +
+						'} else {\nconsole.info("document.execCommand ne fonctionne pas…")\n}' +
+						'return false;\n});' +
+						'</script></body></html>';
+
             res.status(200).send(corp);
         });
 		return;
@@ -73,9 +86,10 @@ app.post('/list', function(req, res) {
 
 //Interface pour modifier le numéro du compteur
 app.get('/modif', function(req, res) {
-    var corp = '<html><script>function sendForm() {\n' + 
+    var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+				'<script>function sendForm() {\n' + 
                 '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
-                '}\n</script><body><form method="post" name="form1" action="/maj">' +
+                '}\n</script></head><body><form method="post" name="form1" action="/maj">' +
                     '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
                     '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
                 '</form></body></html>';
@@ -89,7 +103,6 @@ app.get('/modif2', function(req, res) {
     var corp = '<html><script>function sendForm() {\n' + 
                 '    var nb = document.form1.nb.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nb=" + nb;\n' +
                 '}\n</script><body><form method="post" name="form1" action="/list">' +
-                    'Combien de numéro de devis avez-vous besoin ? <br/>' +
                     '<input placeholder="" name="nb" id="nb" maxlength="3" type="text" />' +
                     '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
                 '</form></body></html>';

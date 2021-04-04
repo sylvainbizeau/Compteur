@@ -1,3 +1,3 @@
 cd "C:\Users\sbizeau\OneDrive - Nexans\Programmation\Node.js\CB-compteur"
-cmd /k npm start
+cmd /k heroku local
 pause
