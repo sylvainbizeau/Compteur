@@ -1,13 +1,10 @@
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
 const {MongoClient} = require("mongodb");
 
-const PORT = process.env.PORT || 5000
-const DB_PATH = __dirname + '/db/compteur.txt'
-
+const PORT = process.env.PORT || 5000;
 const dbName = "CompteurDb";
 const dbColl = "CompteurC";
 const dbUser = process.env.DBUSER;
@@ -34,7 +31,7 @@ function ValZero (Val) {
 app.get('/nb', (req, res) => {
     Lire().then(V => {
         console.log("Lue: "+V);
-        V = ValZero(V); 
+        V = ValZero(++V); 
         res.send(V);
         Ecrire(V);
     });
@@ -53,7 +50,7 @@ app.post('/maj', function(req, res) {
     res.status(400).send() // si pas nombre
 })
 
-app.get('/list', function(req, res) {
+app.post('/list', function(req, res) {
     const nb = req.query.nb;
     if (+nb) { // si nombre
         Lire().then(V => {
@@ -68,8 +65,8 @@ app.get('/list', function(req, res) {
                         '<H1> Voici la liste des '+nb+' numéros demandés :<br/>'+ValS+'</H1>' +
                         '</body></html>';
             res.status(200).send(corp);
-            return;
         });
+		return;
     }
     res.status(400).send() // si pas nombre
 })
@@ -80,6 +77,20 @@ app.get('/modif', function(req, res) {
                 '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
                 '}\n</script><body><form method="post" name="form1" action="/maj">' +
                     '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
+                    '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
+                '</form></body></html>';
+
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).send(corp);
+})
+
+//Interface pour modifier le numéro du compteur
+app.get('/modif2', function(req, res) {
+    var corp = '<html><script>function sendForm() {\n' + 
+                '    var nb = document.form1.nb.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nb=" + nb;\n' +
+                '}\n</script><body><form method="post" name="form1" action="/list">' +
+                    'Combien de numéro de devis avez-vous besoin ? <br/>' +
+                    '<input placeholder="" name="nb" id="nb" maxlength="3" type="text" />' +
                     '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
                 '</form></body></html>';
 
