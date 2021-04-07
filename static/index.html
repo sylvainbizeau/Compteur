@@ -1,11 +1,6 @@
 ﻿<html>
 <head>
     <link rel="stylesheet" media="all" href="copy.css">
-    <script>
-        function sendForm() {
-            var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;
-        }
-    </script>
 </head>
 <body>
     <center>
@@ -38,6 +33,11 @@
             document.getElementById('message').innerHTML = "Pour votre première utilisation de ce site, veuillez faire un clic droit sur le lien ci-dessous, puis cliquez sur \"Ajouter aux Favoris...\"<br/>    <a href='javascript:((function(){var a;a=function(){var t=new XMLHttpRequest;t.onreadystatechange=function(){if(4==this.readyState&&200==this.status){try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\")}catch(r){try{e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0]}catch(r){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML}catch(e){}}}null!==e&&(e.value=this.responseText),document.body.style.cursor=\"default\"}},c=!1;try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\"),c=!0}catch(r){try{e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0],c=!0}catch(r){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML,c=!0}catch(e){alert(\"Aucune zone texte compatible n'a été trouvé)}}}0!=c&&(t.open(\"GET\",\"http://cb-compteur.herokuapp.com/nb?d=\"+Date.now(),!0),t.send(),document.body.style.cursor=\"wait\")},a(),void 0})).call(this);'>Numéro de devis</a><br/>"
         } else {
             document.getElementById('message').innerHTML = "<span style=\"color:#ff0000;\">Pour votre première utilisation de ce site, veuillez ouvrir ce site sur internet explorer 11 ou inférieur</span><br/>"
+        }
+	function sendForm() {
+            var nbCB = document.form1.nbCB.value;
+            var action = document.form1.action;
+            document.form1.action = action + "?nbCB=" + nbCB;
         }
     </script>
         <br/>
