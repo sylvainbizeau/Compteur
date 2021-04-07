@@ -43,8 +43,8 @@ app.post('/maj', function(req, res) {
     if (+nb) { // si nombre
         Ecrire(nb);
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
-					'</head><body><H3> Numéro de devis mis à jour :<br/>'+nb+'</H3>';
-                    '</body></html>';
+		   '</head><body><H3> Numéro de devis mis à jour :<br/>'+nb+'</H3>';
+                   '</body></html>';
         res.status(200).send(corp);
         return
     }
@@ -77,7 +77,7 @@ app.post('/list', function(req, res) {
 
             res.status(200).send(corp);
         });
-		return;
+	return;
     }
     res.status(400).send() // si pas nombre
 })
@@ -85,24 +85,12 @@ app.post('/list', function(req, res) {
 //Interface pour modifier le numéro du compteur
 app.get('/modif', function(req, res) {
     var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
-				'<script>function sendForm() {\n' + 
+		'<script>function sendForm() {\n' + 
                 '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
                 '}\n</script></head><body><form method="post" name="form1" action="/maj">' +
-                    '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
-                    '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
-                '</form></body></html>';
-
-    res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(corp);
-})
-
-//Interface pour modifier le numéro du compteur
-app.get('/modif2', function(req, res) {
-    var corp = '<html><script>function sendForm() {\n' + 
-                '    var nb = document.form1.nb.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nb=" + nb;\n' +
-                '}\n</script><body><form method="post" name="form1" action="/list">' +
-                    '<input placeholder="" name="nb" id="nb" maxlength="3" type="text" />' +
-                    '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
+		'}\nQuel est le dernier numéro de devis ? <br/>' +
+                '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
+                '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
                 '</form></body></html>';
 
     res.setHeader('Content-Type', 'text/html');
