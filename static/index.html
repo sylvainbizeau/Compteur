@@ -35,15 +35,15 @@
             document.getElementById('message').innerHTML = "<span style=\"color:#ff0000;\">Pour votre première utilisation de ce site, veuillez ouvrir ce site sur internet explorer 11 ou inférieur</span><br/>"
         }
 	function sendForm() {
-            var nbCB = document.form1.nbCB.value;
+            var nb = document.form1.nb.value;
             var action = document.form1.action;
-            document.form1.action = action + "?nbCB=" + nbCB;
+            document.form1.action = action + "?nb=" + nb;
         }
     </script>
         <br/>
         <form method="post" name="form1" action="/list">
 			Combien de numéro de devis avez-vous besoin ? <br/>
-            <input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />
+            <input placeholder="00001234" name="nb" id="nb" maxlength="8" type="text" />
             <input value="Modifier" id="bt" type="submit" onClick="sendForm()" />
         </form>
     </center>
