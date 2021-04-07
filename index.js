@@ -88,7 +88,7 @@ app.get('/modif', function(req, res) {
 		'<script>function sendForm() {\n' + 
                 '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
                 '}\n</script></head><body><form method="post" name="form1" action="/maj">' +
-		'}\nQuel est le dernier numéro de devis ? <br/>' +
+		'Quel est le dernier numéro de devis ? <br/>' +
                 '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />' +
                 '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
                 '</form></body></html>';
