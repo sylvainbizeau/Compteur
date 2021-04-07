@@ -5,9 +5,7 @@ const cors = require('cors')
 const app = express();
 const {MongoClient} = require("mongodb");
 
-const PORT = process.env.PORT || 5000
-const DB_PATH = __dirname + '/db/compteur.txt'
-
+const PORT = process.env.PORT || 5000;
 const dbName = "CompteurDb";
 const dbColl = "CompteurC";
 const dbUser = process.env.DBUSER;
