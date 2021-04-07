@@ -1,14 +1,50 @@
-<body>
-    <h1>Valeur actuelle: <span id="actualNb"></span></h1>
-
-    <script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>    
+<html>
+<head>
+    <link rel="stylesheet" media="all" href="copy.css">
     <script>
-        fetch('/nb')
-        .then(function(res){
-            return res.text();
-        }).then(function(res){
-            return document.getElementById('actualNb').textContent = res
-        });
+        function sendForm() {
+            var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;
+        }
     </script>
+</head>
+<body>
+    <center>
+    <h4>Bienvenue sur la page de CB Mehun</h4>
+    <span id="message"></span>
+    <br/>
+    <script>
+    //dÃ©tecte si l'utilisateur utilise Internet Explorer
+    //renvoie version de IE ou 0, si le navigateur n'est pas IE
+    function IEdetection() {
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf('MSIE ');
+        if (msie > 0) {
+            // IE 10 ou plus ancien, renvoie le nombre de version
+            return (parseInt(ua.substring(
+              msie + 5, ua.indexOf('.', msie)), 10));
+        }
+        var trident = ua.indexOf('Trident/');
+        if (trident > 0) {
+            // IE 11, renvoie le nombre de version
+            var rv = ua.indexOf('rv:');
+            return (parseInt(ua.substring(
+              rv + 3, ua.indexOf('.', rv)), 10));
+        }
+        // L'utilisateur utilise un autre navigateur
+        return (0);
+    }
+    var r = IEdetection();
+    if ((r !== 0) && (r < 12)) {
+        document.getElementById('message').innerHTML = "Pour votre première utilisation de ce site, veuillez faire un clic droit sur le lien ci-dessous, puis cliquez sur \"Ajouter aux Favoris...\"<br/>    <a href='javascript:((function(){var a;a=function(){var t=new XMLHttpRequest;t.onreadystatechange=function(){if(4==this.readyState&&200==this.status){try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\")}catch(r){try{e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0]}catch(r){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML}catch(e){}}}null!==e&&(e.value=this.responseText),document.body.style.cursor=\"default\"}},c=!1;try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\"),c=!0}catch(r){try{e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0],c=!0}catch(r){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML,c=!0}catch(e){alert(\"Aucune zone texte compatible n'a été trouvé\")}}}0!=c&&(t.open(\"GET\",\"http://cb-compteur.herokuapp.com/nb?d=\"+Date.now(),!0),t.send(),document.body.style.cursor=\"wait\")},a(),void 0})).call(this);'>Numéro de devis</a><br/>"
+    } else {
+        document.getElementById('message').innerHTML = "<span style=\"color:#ff0000;\">Pour votre première utilisation de ce site, veuillez ouvrir ce site sur internet explorer 11 ou inférieur</span><br/>"
+    }
+    </script>
+        <form method="post" name="form1" action="/maj">
+			Combien de numéro de devis avez-vous besoin ? <br/>
+            <input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" />
+            <input value="Modifier" id="bt" type="submit" onClick="sendForm()" />
+        </form>
+    </center>
 </body>
+</html>
