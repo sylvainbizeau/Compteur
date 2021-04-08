@@ -38,6 +38,17 @@ app.get('/nb', (req, res) => {
     });
   });
 
+app.get('/aff', (req, res) => {
+    Lire().then(V => {
+        var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+		   '</head><body><H3>Le numéro de devis actuel est '+nb+'</H3>';
+                   '</body></html>';
+        res.status(200).send(corp);
+        return
+    });
+    res.status(400).send() // si pas nombre
+});
+
 app.post('/maj', function(req, res) {
     const nb = req.query.nbCB;
     if (+nb) { // si nombre
