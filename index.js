@@ -45,8 +45,10 @@ app.get('/aff', (req, res) => {
                    '</body></html>';
         res.status(200).send(corp);
         return
+    }).catch((error) => {
+        console.log(error);
+        res.status(400).send() // si pas nombre
     });
-    res.status(400).send() // si pas nombre
 });
 
 app.post('/maj', function(req, res) {
