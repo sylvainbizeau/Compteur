@@ -1,4 +1,3 @@
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -23,12 +22,7 @@ app.use(function(req, res, next) {
     
 app.use(express.static(__dirname + '/static'));
 
-function ValZero (Val) {
-    const zero = '0000000';
-    var ValS = Val.toString();
-    return zero.substring(1, 9 -ValS.length) + ValS;
-}
-
+// Renvoie le numéro de devis après l'avoir incrémenter (format texte)
 app.get('/nb', (req, res) => {
     Lire().then(V => {
         console.log("Lue: "+V);
@@ -38,6 +32,7 @@ app.get('/nb', (req, res) => {
     });
   });
 
+// Affiche le numéro de devis sans l'incrémenter
 app.get('/aff', (req, res) => {
     Lire().then(nb => {
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
@@ -47,10 +42,26 @@ app.get('/aff', (req, res) => {
         return
     }).catch((error) => {
         console.log(error);
-        res.status(400).send() // si pas nombre
+        res.status(400).send() 
     });
 });
 
+//Interface pour modifier le numéro du devis
+app.get('/modif', function(req, res) {
+    var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+		'<script>function sendForm() {\n' + 
+                '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
+                '}\n</script></head><body><form method="post" name="form1" action="/maj">' +
+		'Quel est le dernier numéro de devis ? <br/>' +
+                '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" /> ' +
+                '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
+                '</form></body></html>';
+
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).send(corp);
+})
+
+//modifie le numéro du devis
 app.post('/maj', function(req, res) {
     const nb = req.query.nbCB;
     if (+nb) { // si nombre
@@ -64,6 +75,7 @@ app.post('/maj', function(req, res) {
     res.status(400).send() // si pas nombre
 })
 
+// Affiche une liste de numéro de NB devis demandé via l'interface
 app.post('/list', function(req, res) {
     const nb = req.query.nb;
     if (+nb) { // si nombre
@@ -95,25 +107,19 @@ app.post('/list', function(req, res) {
     res.status(400).send() // si pas nombre
 })
 
-//Interface pour modifier le numéro du compteur
-app.get('/modif', function(req, res) {
-    var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
-		'<script>function sendForm() {\n' + 
-                '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
-                '}\n</script></head><body><form method="post" name="form1" action="/maj">' +
-		'Quel est le dernier numéro de devis ? <br/>' +
-                '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" /> ' +
-                '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
-                '</form></body></html>';
-
-    res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(corp);
-})
-
+//Execute le serveur
 app.listen(PORT, function(){
     console.log('serveur en écoute sur ' + PORT.toString());
 })
 
+//retourne un chaine de 8 caractère commencant part n "0" et finissant avec la valeur donnée
+function ValZero (Val) {
+    const zero = '0000000';
+    var ValS = Val.toString();
+    return zero.substring(1, 9 -ValS.length) + ValS;
+}
+
+//Lecture de la valeur unique dans la BD
 async function Lire(){
     var Val1;
     const clientL = new MongoClient(uri, options);
@@ -135,6 +141,7 @@ async function Lire(){
     }
 }
 
+//Ecriture de la valeur unique dans la BD
 async function Ecrire(Val){
     Val = Val.toString();
     const clientE = new MongoClient(uri, options);
