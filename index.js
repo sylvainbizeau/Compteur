@@ -39,7 +39,7 @@ app.get('/nb', (req, res) => {
   });
 
 app.get('/aff', (req, res) => {
-    Lire().then(V => {
+    Lire().then(nb => {
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
 		   '</head><body><H3>Le numéro de devis actuel est '+nb+'</H3>';
                    '</body></html>';
