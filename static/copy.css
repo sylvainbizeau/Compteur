@@ -76,3 +76,16 @@ p {
   font-weight: bold;
   letter-spacing: .01em
 }
+
+.CustDivCB {
+    color: #333;
+    font-family:arial, helvetica, clean, sans-serif;
+    background-color:#eee;
+    position:fixed;
+    right:0;
+    top:0;
+    z-index:2147483637;
+    padding:5px;
+    border-width: 0 0 1px 1px;
+    border-radius: 0 0 0 8px;
+}
