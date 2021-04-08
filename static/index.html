@@ -52,12 +52,6 @@
           }
           return "";
         }
-        
-        function sendForm() {
-            var nb = document.form1.nb.value;
-            var action = document.form1.action;
-            document.form1.action = action + "?nb=" + nb;
-        }
     </script>
 </head>
 <body>
@@ -78,6 +72,11 @@
             }
         } else {
             document.getElementById('message').innerHTML = "<br/><span style=\"color:#ff0000;\">Pour utiliser de ce site pleinement, veuillez l'ouvrir sur internet explorer 11 ou inférieur</span><br/><br/><br/>"
+        }
+	function sendForm() {
+            var nb = document.form1.nb.value;
+            var action = document.form1.action;
+            document.form1.action = action + "?nb=" + nb;
         }
     </script>
         <form method="post" name="form1" action="/list">
