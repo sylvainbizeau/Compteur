@@ -1,4 +1,7 @@
     function connect() {
+        function H(e) { //isHidden
+            return !( e.offsetWidth || e.offsetHeight )
+        }
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -33,6 +36,8 @@
             try {
                 //alert("2");
                 e = document.getElementById('warningMess').parentElement.parentElement.children[2].children[0];
+                v = H(e);
+                if (v) throw 0;
                 c = true;
             } catch (err) {
                 try {
@@ -47,7 +52,7 @@
             }
         }
         if (c == false) return;
-        xhttp.open("GET", "http://localhost:5000/nb?d="+Date.now(), true);
+        xhttp.open("GET", "http://cb-compteur.herokuapp.com/nb?d="+Date.now(), true);
         xhttp.send();
         document.body.style.cursor = "wait";
     }
