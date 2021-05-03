@@ -9,19 +9,27 @@
                     i = document.getElementById('innerContent');
                     f = i.contentDocument || i.contentWindow.document;
                     e = f.getElementById('toDesign');
+                    n = 1;
                 } catch (err) {
                     try {
                         e = document.getElementById('warningMess').parentElement.parentElement.children[2].children[0];
+                        n = 2;
                     } catch (err) {
                         try {
                             e = document.getElementById('designId_FRME_POWER_WIZARD');
                             iH = e.innerHTML;
+                            n = 3;
                         } catch (err) {
 
                         }
                     }
                 }
-                if (e !== null) e.value = this.responseText;
+                if (e !== null) {
+                    e.value = this.responseText;
+                    if (n==1) checkDesignSingle('toDesign');
+                    if (n==2) checkDesignExists(this.responseText);
+                    if (n==3) checkDesign('designId_FRME_POWER_WIZARD');
+                }
                 document.body.style.cursor = "default";
             }
         };
