@@ -35,7 +35,7 @@ app.get('/nb', (req, res) => {
 
 // Affiche le numéro de devis sans l'incrémenter
 app.get('/aff', (req, res) => {
-    LireMax().then(nb => {
+    LireNb().then(nb => {
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
 		   '</head><body><H3>Le numéro de devis actuel est '+nb+'</H3>';
                    '</body></html>';
