@@ -170,7 +170,7 @@ async function Ecrire(Val){
         await Lire(dbCollMax).then(V => {
             Maxx = V;
         });
-        if (Val > Maxx) {
+        if (parseInt(Val) > parseInt(Maxx)) {
             console.log("il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'");
             return 
         }
@@ -178,7 +178,7 @@ async function Ecrire(Val){
         await clientE.connect();
         console.log("Connecté à la base /Ecriture");
 
-        var coll = clientE.db(dbName).collection(dbColl);
+        var coll = clientE.db(dbName).collection(dbCollNb);
         await coll.deleteOne({});
         await coll.insertOne({"nb":Val});
         console.log("Ecrit: "+Val);
