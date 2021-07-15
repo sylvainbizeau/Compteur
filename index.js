@@ -92,6 +92,7 @@ app.post('/list', function(req, res) {
             LireMax().then(V => {
                 Maxx = V;
             });
+            console.log("val = '"+parseInt(Val).toString()+"' et max = '"+parseInt(Maxx).toString()+"'");
             if (parseInt(Val) > parseInt(Maxx)) {
                 console.log("il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'");
                 corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
