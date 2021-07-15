@@ -25,7 +25,7 @@ app.use(express.static(__dirname + '/static'));
 
 // Renvoie le numéro de devis après l'avoir incrémenter (format texte)
 app.get('/nb', (req, res) => {
-    Lire().then(V => {
+    LireNb().then(V => {
         console.log("Lue: "+V);
         V = ValZero(++V); 
         res.send(V);
@@ -35,7 +35,7 @@ app.get('/nb', (req, res) => {
 
 // Affiche le numéro de devis sans l'incrémenter
 app.get('/aff', (req, res) => {
-    LireNb().then(nb => {
+    LireMax().then(nb => {
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
 		   '</head><body><H3>Le numéro de devis actuel est '+nb+'</H3>';
                    '</body></html>';
@@ -134,8 +134,8 @@ async function LireMax(){
     var Maxx;
     await Lire(dbCollMax).then(V => {
       Maxx = V;
-      return Maxx;
     });
+    return Maxx;
 }
 
 //Lecture de la valeur choisit dans la collection de la BD
