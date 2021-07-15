@@ -87,20 +87,32 @@ app.post('/list', function(req, res) {
             for (i=1;i<nb;i++) {
                 ValS = ValS+'\n'+ValZero(++Val);
             }
-            Ecrire(Val);
-            var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
-						'</head><body><H3> Voici la liste de numéro demandée :</H3><textarea id="to-copy" style="height: 400px;">'+ValS+'</textarea>' +
-						'<button id="copy" type="button">Copier dans le presse-papier<span class="copiedtext" aria-hidden="true">Copié</span></button>' +
-						'<script>\nvar toCopy = document.getElementById("to-copy");\nvar btnCopy = document.getElementById("copy");\n' +
-						'btnCopy.addEventListener("click", function(){\n' +
-						'toCopy.select();\n' +
-						'if (document.execCommand("copy")) {\n' +
-						'btnCopy.classList.add("copied");\n document.body.style.cursor = "wait";\n' +
-						'var temp = setInterval(function(){\n btnCopy.classList.remove("copied");\n document.body.style.cursor = "default";\n clearInterval(temp);\n }, 600);\n' +
-						'} else {\nconsole.info("document.execCommand ne fonctionne pas…")\n}' +
-						'return false;\n});' +
-						'</script></body></html>';
-
+            var Maxx;
+            var corp;
+            await LireMax.then(V => {
+                Maxx = V;
+            });
+            if (parseInt(Val) > parseInt(Maxx)) {
+                console.log("il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'");
+                corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+                '</head><body><H3> Voici la liste de numéro demandée :</H3><textarea id="to-copy" style="height: 400px;">'+ValS+'</textarea>' +
+                "Il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'" +
+                '</H3></body></html>';
+            } else {
+                Ecrire(Val);
+                corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+                '</head><body><H3> Voici la liste de numéro demandée :</H3><textarea id="to-copy" style="height: 400px;">'+ValS+'</textarea>' +
+                '<button id="copy" type="button">Copier dans le presse-papier<span class="copiedtext" aria-hidden="true">Copié</span></button>' +
+                '<script>\nvar toCopy = document.getElementById("to-copy");\nvar btnCopy = document.getElementById("copy");\n' +
+                'btnCopy.addEventListener("click", function(){\n' +
+                'toCopy.select();\n' +
+                'if (document.execCommand("copy")) {\n' +
+                'btnCopy.classList.add("copied");\n document.body.style.cursor = "wait";\n' +
+                'var temp = setInterval(function(){\n btnCopy.classList.remove("copied");\n document.body.style.cursor = "default";\n clearInterval(temp);\n }, 600);\n' +
+                '} else {\nconsole.info("document.execCommand ne fonctionne pas…")\n}' +
+                'return false;\n});' +
+                '</script></body></html>';
+            }
             res.status(200).send(corp);
         });
         return;
