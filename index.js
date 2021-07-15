@@ -6,7 +6,8 @@ const {MongoClient} = require("mongodb");
 
 const PORT = process.env.PORT || 5000;
 const dbName = "CompteurDb";
-const dbColl = "CompteurC";
+const dbCollNb = "CompteurC";
+const dbCollMax = "CompteurMax";
 const dbUser = process.env.DBUSER;
 const dbPassword = process.env.DBPASSWORD;
 const uri =  "mongodb+srv://"+dbUser+":"+dbPassword+"@cluster0.khy3m.mongodb.net/"+dbName+"?retryWrites=true&w=majority";
@@ -79,7 +80,7 @@ app.post('/maj', function(req, res) {
 app.post('/list', function(req, res) {
     const nb = req.query.nb;
     if (+nb) { // si nombre
-        Lire().then(V => {
+        LireNb().then(V => {
             var Val = V;
             var ValS = ValZero(++Val);
             var i;
@@ -102,7 +103,7 @@ app.post('/list', function(req, res) {
 
             res.status(200).send(corp);
         });
-	return;
+        return;
     }
     res.status(400).send() // si pas nombre
 })
@@ -120,7 +121,25 @@ function ValZero (Val) {
 }
 
 //Lecture de la valeur unique dans la BD
-async function Lire(){
+async function LireNb(){
+    var Val1;
+    Lire(dbCollNb).then(V => {
+      Vall = V;
+    }
+    return Val1;
+}
+
+//Lecture de la valeur max dans la BD
+async function LireNb(){
+    var Maxx;
+    Lire(dbCollMax).then(V => {
+      Maxx = V;
+    }
+    return Maxx;
+}
+
+//Lecture de la valeur choisit dans la collection de la BD
+async function Lire(vColl){
     var Val1;
     const clientL = new MongoClient(uri, options);
     try {
@@ -128,7 +147,7 @@ async function Lire(){
         await clientL.connect();
         console.log("Connecté à la base /Lecture");
 
-        var coll = clientL.db(dbName).collection(dbColl);
+        var coll = clientL.db(dbName).collection(vColl);
         cursor = coll.find({}).limit(1)
         await cursor.forEach(function(element) {
             Val1 = element.nb;
