@@ -36,7 +36,7 @@ app.get('/nb', (req, res) => {
             } else {
                 res.send(V);
                 Ecrire(V);
-            });
+            }
         });
     });
 });
