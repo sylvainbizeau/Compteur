@@ -89,7 +89,7 @@ app.post('/list', function(req, res) {
             }
             var Maxx;
             var corp;
-            await LireMax.then(V => {
+            LireMax.then(V => {
                 Maxx = V;
             });
             if (parseInt(Val) > parseInt(Maxx)) {
