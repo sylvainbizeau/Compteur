@@ -122,15 +122,15 @@ function ValZero (Val) {
 
 //Lecture de la valeur unique dans la BD
 async function LireNb(){
-    var Val1;
+    var Nb;
     await Lire(dbCollNb).then(V => {
-      Vall = V;
-      return Val1;
+      Nb = V;
     });
+    return Nb;
 }
 
 //Lecture de la valeur max dans la BD
-async function LireNb(){
+async function LireMax(){
     var Maxx;
     await Lire(dbCollMax).then(V => {
       Maxx = V;
