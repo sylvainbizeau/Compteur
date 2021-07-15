@@ -165,6 +165,15 @@ async function Ecrire(Val){
     Val = Val.toString();
     const clientE = new MongoClient(uri, options);
     try {
+        // récupération du bord max
+        var Maxx;
+        await Lire(dbCollMax).then(V => {
+            Maxx = V;
+        });
+        if (Val > Maxx) {
+            console.log("il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'");
+            return 
+        }
         //console.log("Connection à la base /E");
         await clientE.connect();
         console.log("Connecté à la base /Ecriture");
