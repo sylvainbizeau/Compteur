@@ -126,7 +126,7 @@ async function LireNb(){
     await Lire(dbCollNb).then(V => {
       Vall = V;
       return Val1;
-    }
+    });
 }
 
 //Lecture de la valeur max dans la BD
@@ -135,7 +135,7 @@ async function LireNb(){
     await Lire(dbCollMax).then(V => {
       Maxx = V;
       return Maxx;
-    }
+    });
 }
 
 //Lecture de la valeur choisit dans la collection de la BD
