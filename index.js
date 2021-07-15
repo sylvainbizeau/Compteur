@@ -25,13 +25,21 @@ app.use(express.static(__dirname + '/static'));
 
 // Renvoie le numéro de devis après l'avoir incrémenter (format texte)
 app.get('/nb', (req, res) => {
-    LireNb().then(V => {
-        console.log("Lue: "+V);
-        V = ValZero(++V); 
-        res.send(V);
-        Ecrire(V);
+    LireMax().then(V => {
+        var Maxx = V;
+        LireNb().then(V => {
+            console.log("Lue: "+V);
+            V = ValZero(++V); 
+            if (parseInt(V) > parseInt(Maxx)) {
+                res.send(Maxx);
+                console.log("il n'est pas possible d'écrire la valeur '"+V+"' car elle supérieur à '"+Maxx+"'");               
+            } else {
+                res.send(V);
+                Ecrire(V);
+            });
+        });
     });
-  });
+});
 
 // Affiche le numéro de devis sans l'incrémenter
 app.get('/aff', (req, res) => {
@@ -90,7 +98,6 @@ app.post('/list', function(req, res) {
                     ValS = ValS+'\n'+ValZero(++Val);
                 }
                 var corp;
-                console.log("val = '"+parseInt(Val).toString()+"' et max = '"+parseInt(Maxx).toString()+"'");
                 if (parseInt(Val) > parseInt(Maxx)) {
                     console.log("il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'");
                     corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
