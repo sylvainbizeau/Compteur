@@ -144,7 +144,7 @@ app.post('/list', function(req, res) {
                 if (parseInt(Val) > parseInt(Maxx)) {
                     console.log("il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'");
                     corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
-                    '</head><body><H3>' +
+                    '</head><body><H3 style="color: red;">' +
                     "Il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'" +
                     '</H3></body></html>';
                 } else {
