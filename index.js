@@ -1,3 +1,5 @@
+// faire interface modifMax interface
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -35,7 +37,7 @@ app.get('/nb', (req, res) => {
                 console.log("il n'est pas possible d'écrire la valeur '"+V+"' car elle supérieur à '"+Maxx+"'");               
             } else {
                 res.send(V);
-                Ecrire(V);
+                EcrireNb(V);
             }
         });
     });
@@ -61,7 +63,22 @@ app.get('/modif', function(req, res) {
 		'<script>function sendForm() {\n' + 
                 '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
                 '}\n</script></head><body><form method="post" name="form1" action="/maj">' +
-		'Quel est le dernier numéro de devis ? <br/>' +
+                'Quel est le dernier numéro de devis ? <br/>' +
+                '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" /> ' +
+                '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
+                '</form></body></html>';
+
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).send(corp);
+})
+
+//Interface pour modifier le numéro de devis maximum à ne pas dépasser
+app.get('/modifmax', function(req, res) {
+    var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+		'<script>function sendForm() {\n' + 
+                '    var nbCB = document.form1.nbCB.value;\nvar action = document.form1.action;\ndocument.form1.action = action + "?nbCB=" + nbCB;\n' +
+                '}\n</script></head><body><form method="post" name="form1" action="/majmax">' +
+                'Quel est le numéro de devis maximum à ne pas dépasser ? <br/>' +
                 '<input placeholder="00001234" name="nbCB" id="nbCB" maxlength="8" type="text" /> ' +
                 '<input value="Modifier" id="bt" type="submit" onClick="sendForm()" />' + 
                 '</form></body></html>';
@@ -74,9 +91,23 @@ app.get('/modif', function(req, res) {
 app.post('/maj', function(req, res) {
     const nb = req.query.nbCB;
     if (+nb) { // si nombre
-        Ecrire(nb);
+        EcrireNb(nb);
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
 		   '</head><body><H3> Numéro de devis mis à jour :<br/>'+nb+'</H3>';
+                   '</body></html>';
+        res.status(200).send(corp);
+        return
+    }
+    res.status(400).send() // si pas nombre
+})
+
+//modifie le numéro de devis maximum à ne pas dépasser
+app.post('/majmax', function(req, res) {
+    const nb = req.query.nbCB;
+    if (+nb) { // si nombre
+        EcrireMax(nb);
+        var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+		   '</head><body><H3> Numéro numéro de devis maximum à ne pas dépasser mis à jour :<br/>'+nb+'</H3>';
                    '</body></html>';
         res.status(200).send(corp);
         return
@@ -105,7 +136,7 @@ app.post('/list', function(req, res) {
                     "Il n'est pas possible d'écrire la valeur '"+Val+"' car elle supérieur à '"+Maxx+"'" +
                     '</H3></body></html>';
                 } else {
-                    Ecrire(Val);
+                    EcrireNb(Val);
                     corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
                     '</head><body><H3> Voici la liste de numéro demandée :</H3><textarea id="to-copy" style="height: 400px;">'+ValS+'</textarea>' +
                     '<button id="copy" type="button">Copier dans le presse-papier<span class="copiedtext" aria-hidden="true">Copié</span></button>' +
@@ -180,7 +211,7 @@ async function Lire(vColl){
 }
 
 //Ecriture de la valeur unique dans la BD
-async function Ecrire(Val){
+async function EcrireNb(Val){
     Val = Val.toString();
     const clientE = new MongoClient(uri, options);
     try {
@@ -198,6 +229,26 @@ async function Ecrire(Val){
         console.log("Connecté à la base /Ecriture");
 
         var coll = clientE.db(dbName).collection(dbCollNb);
+        await coll.deleteOne({});
+        await coll.insertOne({"nb":Val});
+        console.log("Ecrit: "+Val);
+    } catch (e) {
+        console.error(e);
+    } finally {
+        await clientE.close();
+    }
+}
+
+//Ecriture de la valeur unique dans la BD
+async function EcrireMax(Val){
+    Val = Val.toString();
+    const clientE = new MongoClient(uri, options);
+    try {
+        //console.log("Connection à la base /E");
+        await clientE.connect();
+        console.log("Connecté à la base /Ecriture");
+
+        var coll = clientE.db(dbName).collection(dbCollMax);
         await coll.deleteOne({});
         await coll.insertOne({"nb":Val});
         console.log("Ecrit: "+Val);
