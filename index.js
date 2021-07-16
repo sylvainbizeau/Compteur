@@ -1,5 +1,3 @@
-// faire interface modifMax interface
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -48,6 +46,20 @@ app.get('/aff', (req, res) => {
     LireNb().then(nb => {
         var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
 		   '</head><body><H3>Le numéro de devis actuel est '+nb+'</H3>';
+                   '</body></html>';
+        res.status(200).send(corp);
+        return
+    }).catch((error) => {
+        console.log(error);
+        res.status(400).send() 
+    });
+});
+
+// Affiche le numéro de devis maximum à ne pas dépasser sans l'incrémenter
+app.get('/affmax', (req, res) => {
+    LireMax().then(nb => {
+        var corp = '<html><head><link rel="stylesheet" media="all" href="copy.css">' + 
+		   '</head><body><H3>Le numéro de devis maximum à ne pas dépasser est '+nb+'</H3>';
                    '</body></html>';
         res.status(200).send(corp);
         return
