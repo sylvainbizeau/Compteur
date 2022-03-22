@@ -3,6 +3,21 @@
     <link rel="stylesheet" media="all" href="copy.css">
     <link rel="shortcut icon" href="favicon.ico">
     <script>
+        async function copyTextToClipboard(text) {
+          try {
+            await navigator.clipboard.writeText(text);
+            //alert('Text copied to clipboard');
+          } catch(err) {
+            alert('Error in copying text: ', err);
+          }
+        }
+    </script>
+</head>
+<body>
+    <center>
+    <h4>Bienvenue sur la page de CB Mehun</h4>
+    <span id="message"></span>
+    <script>
         //détecte si l'utilisateur utilise Internet Explorer
         //renvoie version de IE ou 0, si le navigateur n'est pas IE
         function IEdetection() {
@@ -23,47 +38,106 @@
             // L'utilisateur utilise un autre navigateur
             return (0);
         }
-        function avertissement() {
-            document.getElementById('message').innerHTML = "<br/>Pour votre première utilisation de ce site, veuillez faire un clic droit sur le lien ci-dessous, puis cliquez sur \"Ajouter aux Favoris...\"<br/>    <a href='javascript:((function(){var a;a=function(){var t=new XMLHttpRequest;t.onreadystatechange=function(){if(4==this.readyState&&200==this.status){try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\"),n=1}catch(r){try{e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0],n=2}catch(r){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML,n=3}catch(e){}}}null!==e&&(e.value=this.responseText,1==n&&i.contentWindow.checkDesignSingle(\"toDesign\"),2==n&&checkDesignExists(this.responseText),3==n&&checkDesign(\"designId_FRME_POWER_WIZARD\")),document.body.style.cursor=\"default\"}},c=!1;try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\"),c=!0}catch(r){try{if(e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0],v=function(e){return!(e.offsetWidth||e.offsetHeight)}(e),v)throw 0;c=!0}catch(r){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML,c=!0}catch(e){alert(\"Aucune zone texte compatible n%27a été trouvé\");window.open(\"http://cb-compteur.herokuapp.com/\",\"_blank\")}}}0!=c&&(t.open(\"GET\",\"http://cb-compteur.herokuapp.com/nb?d=\"+Date.now(),!0),t.send(),document.body.style.cursor=\"wait\")},a(),void 0})).call(this);'>Numéro de devis</a><br/><br/><br/>";
+        //détecte si l'utilisateur utilise Edge
+        //renvoie "Vrai" pour Edge, sinon "Faux"
+        function EdgeDetection() {
+            // Edge 20+
+            return (/Edge/.test(navigator.userAgent));
+        }
+
+        function setCookie(name, value, daysToLive) {
+          // Encode value in order to escape semicolons, commas, and whitespace
+          var cookie = name + "=" + encodeURIComponent(value);
+          
+          if(typeof daysToLive === "number") {
+              /* Sets the max-age attribute so that the cookie expires
+              after the specified number of days */
+              cookie += "; max-age=" + (daysToLive*24*60*60);
+              
+              document.cookie = cookie;
+          }
+        }
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
+            
+            // Loop through the array elements
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+                
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if(name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+    
+            // Return null if not found
+            return null;
+        }
+        
+        function AddToFavorite(url, title) {
+        alert("ee");
+           var ua = navigator.userAgent.toLowerCase();
+           if (ua.indexOf("msie 8") > -1) {
+               external.AddToFavoritesBar(url, title, '');
+           } else {
+              try {
+                 window.external.addFavorite(url, title);
+              } catch (e) {
+                 try {
+                     window.sidebar.addPanel(title, url, '');
+                 } catch (e) {
+                      
+                     copyTextToClipboard(url);
+                     alert("Please try shortcut Ctrl+D to add to favorite");
+                 }
+             }
+           }
+           return false;
+        }
+        function avertissementEdge() {
+            document.getElementById('message').innerHTML = "<br/>Pour votre première utilisation de ce site, veuillez appuyer sur Ctrl + D et cliquer sur \"Plus\" <br/> Dans le champ \"Nom\" écrivez \"Numéro de devis\" et dans \"URL\" effacez tout le texte et appuyer sur Ctrl + V <br/>  <a id=\"textId\" href='javascript:((function(){var a;a=function(){alert("0"),c=!1;try{alert("1"),i=document.getElementById("innerContent"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById("toDesign"),c=!0}catch(t){try{if(alert("2"),e=document.getElementById("warningMess").parentElement.parentElement.children[2].children[0],v=function(e){return!(e.offsetWidth||e.offsetHeight)}(e),v)throw 0;c=!0}catch(t){try{alert("3"),e=document.getElementById("designId_FRME_POWER_WIZARD"),iH=e.innerHTML,c=!0}catch(e){alert("Aucune zone texte compatible n%27a été trouvé");window.open("http://cb-compteur.herokuapp.com/","_blank")}}}0!=c&&(alert("4"),document.body.style.cursor="wait")},a(),void 0})).call(this);'>Numéro de devis</a><br/><br/><br/>";
+            let text = document.getElementById("textId").href;
+            copyTextToClipboard(text);
             setCookie("First", "Ok", 365);
+            return (0);
+        }
+        function avertissementIE() {
+            document.getElementById('message').innerHTML = "<br/>Pour votre première utilisation de ce site, veuillez faire un clic droit sur le lien ci-dessous, puis cliquez sur \"Ajouter aux Favoris...\"<br/>    <a href='javascript:((function(){var a;a=function(){var t=new XMLHttpRequest;t.onreadystatechange=function(){if(4==this.readyState&&200==this.status){try{i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\"),n=1}catch(t){try{e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0],n=2}catch(t){try{e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML,n=3}catch(e){}}}null!==e&&(e.value=this.responseText,1==n&&checkDesignSingle(\"toDesign\"),2==n&&checkDesignExists(this.responseText),3==n&&checkDesign(\"designId_FRME_POWER_WIZARD\")),document.body.style.cursor=\"default\"}},c=!1;try{alert(\"1\"),i=document.getElementById(\"innerContent\"),f=i.contentDocument||i.contentWindow.document,e=f.getElementById(\"toDesign\"),c=!0}catch(t){try{if(alert(\"2\"),e=document.getElementById(\"warningMess\").parentElement.parentElement.children[2].children[0],v=function(e){return!(e.offsetWidth||e.offsetHeight)}(e),v)throw 0;c=!0}catch(t){try{alert(\"3\"),e=document.getElementById(\"designId_FRME_POWER_WIZARD\"),iH=e.innerHTML,c=!0}catch(e){alert(\"Aucune zone texte compatible n%27a été trouvé\");window.open(\"http://cb-compteur.herokuapp.com/\",\"_blank\")}}}0!=c&&(alert(\"4\"),t.open(\"GET\",\"http://cb-compteur.herokuapp.com/nb?d=\"+Date.now(),!0),alert(\"5\"),t.send(),document.body.style.cursor=\"wait\")},a(),void 0})).call(this);'>Numéro de devis</a><br/><br/><br/>";
+            setCookie("First", "Ok", 365);
+            return (0);
         }
         function afficheAvertissement() {
-            avertissement();
+            var i = IEdetection();
+            if ((i !== 0) && (i < 12)) 
+              avertissementIE();
+            else if (EdgeDetection) 
+              avertissementEdge();
+            
+
             var c = document.getElementById('CustDivCB');
             c.innerHTML = "";
             c.removeAttribute("class");
         }
-        function setCookie(cname, cvalue, exdays) {
-          var d = new Date();
-          d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-          var expires = "expires="+d.toUTCString();
-          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-        }
-        function getCookie(cname) {
-          var name = cname + "=";
-          var ca = document.cookie.split(';');
-          for(var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-              c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-              return c.substring(name.length, c.length);
-            }
-          }
-          return "";
-        }
-    </script>
-</head>
-<body>
-    <center>
-    <h4>Bienvenue sur la page de CB Mehun</h4>
-    <span id="message"></span>
-    <script>
+        
         var r = IEdetection();
         if ((r !== 0) && (r < 12)) {
             if (getCookie("First") == "") {
-                avertissement();
+                avertissementIE();
+            } else {
+                var d = document.createElement('div');
+                d.setAttribute('class', 'CustDivCB');
+                d.setAttribute('id', 'CustDivCB');
+                d.innerHTML = "<small><a href='javascript:afficheAvertissement()'>Afficher le lien</a></small>";
+                document.body.appendChild(d);
+            }
+        } else if (EdgeDetection) {
+            if (getCookie("First") == "") {
+                alert("A");
+                avertissementEdge();
+                alert("B");
             } else {
                 var d = document.createElement('div');
                 d.setAttribute('class', 'CustDivCB');
@@ -72,18 +146,21 @@
                 document.body.appendChild(d);
             }
         } else {
-            document.getElementById('message').innerHTML = "<br/><span style=\"color:#ff0000;\">Pour utiliser de ce site pleinement, veuillez l'ouvrir sur internet explorer 11 ou inférieur</span><br/><br/><br/>"
+            
+            document.getElementById('message').innerHTML = "<br/><span style=\"color:#ff0000;\">Pour utiliser de ce site pleinement, veuillez l'ouvrir sur internet explorer 11 ou inférieur  ou sinon Edge</span><br/><br/><br/>"
         }
-	function sendForm() {
+        function sendForm() {
             var nb = document.form1.nb.value;
             var action = document.form1.action;
             document.form1.action = action + "?nb=" + nb;
         }
+        
+
     </script>
         <form method="post" name="form1" action="/list">
-			Combien de numéro de devis avez-vous besoin ? <br/>
+			Combien de num&eacute;ro de devis avez-vous besoin ? <br/>
             <input placeholder="10" name="nb" id="nb" maxlength="8" type="text" />
-            <input value="Générer" id="bt" type="submit" onClick="sendForm()" />
+            <input value="G&eacute;n&eacute;rer" id="bt" type="submit" onClick="sendForm()" />
         </form>
     </center>
 </body>
